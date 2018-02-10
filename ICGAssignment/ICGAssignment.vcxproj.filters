@@ -1,0 +1,138 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="main.cpp" />
+    <ClCompile Include="GUI\QTWindow.cpp">
+      <Filter>GUI</Filter>
+    </ClCompile>
+    <ClCompile Include="GUI\GLUTWindow.cpp">
+      <Filter>GUI</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\Camera.cpp">
+      <Filter>Core</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\Math\Matrix.cpp">
+      <Filter>Core\Math</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\Math\Quaternion.cpp">
+      <Filter>Core\Math</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\Math\Triangle.cpp">
+      <Filter>Core\Math</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\Basic\Assert.cpp">
+      <Filter>Core\Basic</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\Basic\BasicFunctions.cpp">
+      <Filter>Core\Basic</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\Basic\ErrorMessage.cpp">
+      <Filter>Core\Basic</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\Basic\LoadData.cpp">
+      <Filter>Core\Basic</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="GUI">
+      <UniqueIdentifier>{0a0d6b44-46fd-48cd-963d-e92ab75fc617}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Data">
+      <UniqueIdentifier>{c0d0781e-49bf-45bf-849c-848e4b69f4df}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Data\Shader">
+      <UniqueIdentifier>{a097c50e-6fa6-4c16-85b5-b34bec471b16}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Data\Shader\Vertex">
+      <UniqueIdentifier>{7e8cb89d-072e-4c37-b6a4-8a28b11ea390}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Data\Shader\Fragment">
+      <UniqueIdentifier>{cc186a30-7167-45d0-bd3e-dbcc13fe51aa}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Graphics">
+      <UniqueIdentifier>{e6f72bc0-dd5c-4649-87b1-4161bd7c3e1f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Core">
+      <UniqueIdentifier>{24435ecf-139a-4939-8c84-4075f1d4650a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Core\Math">
+      <UniqueIdentifier>{68fefc73-28c9-42a7-a017-6500fb54e5b5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Core\Basic">
+      <UniqueIdentifier>{b402f0e4-008d-4dac-bde2-3ffe979cd8b9}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="GUI\QTWindow.h">
+      <Filter>GUI</Filter>
+    </ClInclude>
+    <ClInclude Include="GUI\GLUTWindow.h">
+      <Filter>GUI</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\Camera.h">
+      <Filter>Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\Math\Axis.h">
+      <Filter>Core\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\Math\Box2D.h">
+      <Filter>Core\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\Math\Color.h">
+      <Filter>Core\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\Math\Matrix.h">
+      <Filter>Core\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\Math\Quaternion.h">
+      <Filter>Core\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\Math\Rotator.h">
+      <Filter>Core\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\Math\Triangle.h">
+      <Filter>Core\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\Math\Vector2.h">
+      <Filter>Core\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\Math\Vector3.h">
+      <Filter>Core\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\Math\Vector4.h">
+      <Filter>Core\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\Math\VectorSSE.h">
+      <Filter>Core\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\Basic\Assert.h">
+      <Filter>Core\Basic</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\Basic\BasicFunctions.h">
+      <Filter>Core\Basic</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\Basic\BasicTypes.h">
+      <Filter>Core\Basic</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\Basic\ErrorMessage.h">
+      <Filter>Core\Basic</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\Basic\FileIO.h">
+      <Filter>Core\Basic</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\Basic\LuaData.h">
+      <Filter>Core\Basic</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\Basic\Target.h">
+      <Filter>Core\Basic</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Data\Shader\Fragment\meshFrag.shader">
+      <Filter>Data\Shader\Fragment</Filter>
+    </None>
+    <None Include="Data\Shader\Vertex\meshVert.shader">
+      <Filter>Data\Shader\Vertex</Filter>
+    </None>
+  </ItemGroup>
+</Project>
