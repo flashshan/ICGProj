@@ -90,8 +90,9 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>$(SolutionDir)ThirdParty\glew\include;$(SolutionDir)ThirdParty\glm\glm;$(SolutionDir)ThirdParty\freeglut\include;$(SolutionDir)ThirdParty\cyCodeBase\include;$(ProjectDir)</AdditionalIncludeDirectories>
-      <TreatWarningAsError>true</TreatWarningAsError>
+      <AdditionalIncludeDirectories>$(SolutionDir)ThirdParty\glew\include;$(SolutionDir)ThirdParty\glm\glm;$(SolutionDir)ThirdParty\freeglut\include;$(SolutionDir)ThirdParty\cyCodeBase\include;$(ProjectDir);$(ProjectDir)Graphics\ImageLoader\;$(ProjectDir)Graphics\ImageLoader\examples</AdditionalIncludeDirectories>
+      <TreatWarningAsError>false</TreatWarningAsError>
+      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <AdditionalLibraryDirectories>$(SolutionDir)ThirdParty\glew\lib;$(SolutionDir)ThirdParty\freeglut\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
@@ -106,15 +107,16 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>$(SolutionDir)ThirdParty\glew\include;$(SolutionDir)ThirdParty\glm\glm;$(SolutionDir)ThirdParty\freeglut\include;$(SolutionDir)ThirdParty\cyCodeBase\include;$(ProjectDir)</AdditionalIncludeDirectories>
-      <TreatWarningAsError>true</TreatWarningAsError>
+      <AdditionalIncludeDirectories>$(SolutionDir)ThirdParty\glew\include;$(SolutionDir)ThirdParty\glm\glm;$(SolutionDir)ThirdParty\freeglut\include;$(SolutionDir)ThirdParty\cyCodeBase\include;$(ProjectDir);$(ProjectDir)Graphics\ImageLoader\;$(ProjectDir)Graphics\ImageLoader\examples</AdditionalIncludeDirectories>
+      <TreatWarningAsError>false</TreatWarningAsError>
+      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <AdditionalLibraryDirectories>$(SolutionDir)ThirdParty\glew\lib;$(SolutionDir)ThirdParty\freeglut\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
     <Link>
       <TreatLinkerWarningAsErrors>true</TreatLinkerWarningAsErrors>
-      <AdditionalDependencies>QtCored4.lib;QtGuid4.lib;QtOpenGLd4.lib;glew32d.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>opengl32.lib;glew32d.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;freeglut.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -124,8 +126,9 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>$(SolutionDir)ThirdParty\glew\include;$(SolutionDir)ThirdParty\glm\glm;$(SolutionDir)ThirdParty\freeglut\include;$(SolutionDir)ThirdParty\cyCodeBase\include;$(ProjectDir)</AdditionalIncludeDirectories>
-      <TreatWarningAsError>true</TreatWarningAsError>
+      <AdditionalIncludeDirectories>$(SolutionDir)ThirdParty\glew\include;$(SolutionDir)ThirdParty\glm\glm;$(SolutionDir)ThirdParty\freeglut\include;$(SolutionDir)ThirdParty\cyCodeBase\include;$(ProjectDir);$(ProjectDir)Graphics\ImageLoader\;$(ProjectDir)Graphics\ImageLoader\examples</AdditionalIncludeDirectories>
+      <TreatWarningAsError>false</TreatWarningAsError>
+      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
@@ -142,8 +145,9 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>$(SolutionDir)ThirdParty\glew\include;$(SolutionDir)ThirdParty\glm\glm;$(SolutionDir)ThirdParty\freeglut\include;$(SolutionDir)ThirdParty\cyCodeBase\include;$(ProjectDir)</AdditionalIncludeDirectories>
-      <TreatWarningAsError>true</TreatWarningAsError>
+      <AdditionalIncludeDirectories>$(SolutionDir)ThirdParty\glew\include;$(SolutionDir)ThirdParty\glm\glm;$(SolutionDir)ThirdParty\freeglut\include;$(SolutionDir)ThirdParty\cyCodeBase\include;$(ProjectDir);$(ProjectDir)Graphics\ImageLoader\;$(ProjectDir)Graphics\ImageLoader\examples</AdditionalIncludeDirectories>
+      <TreatWarningAsError>false</TreatWarningAsError>
+      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
@@ -162,8 +166,10 @@
     <ClCompile Include="Core\Math\Matrix.cpp" />
     <ClCompile Include="Core\Math\Quaternion.cpp" />
     <ClCompile Include="Core\Math\Triangle.cpp" />
+    <ClCompile Include="Graphics\ImageLoader\lodepng.cpp" />
+    <ClCompile Include="Graphics\ImageLoader\lodepng_util.cpp" />
+    <ClCompile Include="Graphics\Texture.cpp" />
     <ClCompile Include="GUI\GLUTWindow.cpp" />
-    <ClCompile Include="GUI\QTWindow.cpp" />
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -186,8 +192,10 @@
     <ClInclude Include="Core\Math\Vector3.h" />
     <ClInclude Include="Core\Math\Vector4.h" />
     <ClInclude Include="Core\Math\VectorSSE.h" />
+    <ClInclude Include="Graphics\ImageLoader\lodepng.h" />
+    <ClInclude Include="Graphics\ImageLoader\lodepng_util.h" />
+    <ClInclude Include="Graphics\Texture.h" />
     <ClInclude Include="GUI\GLUTWindow.h" />
-    <ClInclude Include="GUI\QTWindow.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Data\Shader\Fragment\meshFrag.shader" />

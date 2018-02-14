@@ -12,6 +12,9 @@
 #include "Core/Math/Matrix.h"
 #include "Core/Math/Quaternion.h"
 
+#include "Graphics/ImageLoader/lodepng.h"
+#include "Graphics/Texture.h"
+
 #include <assert.h>
 #include <stdio.h>
 #include <fstream>
@@ -30,13 +33,17 @@ Camera mainCamera(Vector3(0.0f, -3.0f, 0.0f), -180.0f, -90.0f, ProjectionParamet
 GLuint fullTransformMatrixLocation;
 GLuint lightDirectionLocation;
 GLuint eyePositionLocation;
+GLuint texture0Location;
+GLuint texture1Location;
 
 Vector3 lightDirection;
 Vector3 eyePosition;
 
 float lightYaw = 0.0f, lightPitch = 0.0f;
 
-GLuint VBO, VNO, IBO;
+GLuint VBO, VNO, VUVO, IBO;
+Texture *texture1 = nullptr;
+Texture *texture2 = nullptr;
 
 std::string readShaderCode(const char* filePath)
 {
@@ -49,6 +56,29 @@ std::string readShaderCode(const char* filePath)
 	return std::string(
 		std::istreambuf_iterator<char>(input),
 		std::istreambuf_iterator<char>());
+}
+
+void LoadTexture(Texture *&io_texture, const char *i_filePath)
+{
+	unsigned char *data = nullptr;
+	unsigned int width, height;
+	//lodepng_decode_file(data, &width, &height, "Data/Texture/yoda-body.png", LodePNGColorType::LCT_RGBA, 8);
+	if (lodepng_decode32_file(&data, &width, &height, i_filePath))
+	{
+		printf_s("Load tex0 error!\n");
+		assert(0);
+	}
+
+	GLuint texture1Obj;
+	glGenTextures(1, &texture1Obj);
+	if (io_texture != nullptr)
+		delete io_texture;
+
+	io_texture = new Texture(GL_TEXTURE_2D, texture1Obj);
+	glBindTexture(io_texture->GetTarget(), io_texture->GetObj());
+	glTexImage2D(io_texture->GetTarget(), 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, (GLvoid*)data);
+	glTexParameterf(io_texture->GetTarget(), GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTexParameterf(io_texture->GetTarget(), GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 }
 
 void CompileShader()
@@ -115,7 +145,6 @@ struct Vertex
 void GLUTWindow::initOpenGL()
 {
 	//glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
-
 	GLenum res = glewInit();
 	if (res != GLEW_OK)
 	{
@@ -124,45 +153,72 @@ void GLUTWindow::initOpenGL()
 	}
 
 	//std::ostream outputString(std::_Uninitialized);
-	const char* dataFilePath = "Data/Mesh/teapot.obj";
-	if (!teapot.LoadFromFileObj(dataFilePath, false, nullptr))
+	const char* dataFilePath = "teapot.obj";
+	const char* mtlFilePath = "teapot.mtl";
+	if (!teapot.LoadFromFileObj(dataFilePath))
 	{
 		printf_s("Load File: %s failed!\n", dataFilePath);
 		assert(0);
 	}
-
+	/*if (!teapot.LoadFromFileObj(mtlFilePath, true))
+	{
+		printf_s("Load Material: %s failed!\n", dataFilePath);
+		assert(0);
+	}
+*/
 	for (unsigned int i = 0; i < teapot.NV(); ++i)
 	{
 		teapot.V(i) *= 0.05f;
 	}
 
+	glFrontFace(GL_CW);
+	glCullFace(GL_BACK);
+	glEnable(GL_CULL_FACE);
 
+
+	// bind vertex data
 	glGenBuffers(1, &VBO);
 	glBindBuffer(GL_ARRAY_BUFFER, VBO);
 	glBufferData(GL_ARRAY_BUFFER, teapot.NV() * sizeof(float) * 3, &teapot.V(0), GL_STATIC_DRAW);
 	glEnableVertexAttribArray(0);
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, 0);
 
+	// bind normal data
 	glGenBuffers(1, &VNO);
 	glBindBuffer(GL_ARRAY_BUFFER, VNO);
 	glBufferData(GL_ARRAY_BUFFER, teapot.NVN() * sizeof(float) * 3, &teapot.VN(0), GL_STATIC_DRAW);
 	glEnableVertexAttribArray(1);
 	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 0, 0);
 	
+	// bind uv data
+	glGenBuffers(1, &VUVO);
+	glBindBuffer(GL_ARRAY_BUFFER, VUVO);
+	glBufferData(GL_ARRAY_BUFFER, teapot.NVT() * sizeof(float) * 3, &teapot.VT(0), GL_STATIC_DRAW);
+	glEnableVertexAttribArray(2);
+	glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, 0, 0);
 
+	// bind index data
 	glGenBuffers(1, &IBO);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, IBO);
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, teapot.NF() * sizeof(float) * 3, &(teapot.F(0).v[0]), GL_STATIC_DRAW);
 	
-	
+	LoadTexture(texture1, teapot.M(0).map_Kd.data);
+	LoadTexture(texture2, teapot.M(0).map_Ks.data);
+
+
 	CompileShader();
 
+	// assert for test
 	fullTransformMatrixLocation = glGetUniformLocation(shaderProgram, "fullTransformMatrix");
-	assert(fullTransformMatrixLocation != 0xFFFFFFFF);
+	//assert(fullTransformMatrixLocation != 0xFFFFFFFF);
 	lightDirectionLocation = glGetUniformLocation(shaderProgram, "lightDirection");
-	assert(lightDirectionLocation != 0xFFFFFFFF);
+	//assert(lightDirectionLocation != 0xFFFFFFFF);
 	eyePositionLocation = glGetUniformLocation(shaderProgram, "eyePosition");
-	assert(eyePositionLocation != 0xFFFFFFFF);
+	//assert(eyePositionLocation != 0xFFFFFFFF);
+	texture0Location = glGetUniformLocation(shaderProgram, "texSampler0");
+	//assert(texture0Location != 0xFFFFFFFF);
+	texture1Location = glGetUniformLocation(shaderProgram, "texSampler1");
+	//assert(texture1Location != 0xFFFFFFFF);
 }
 
 
@@ -188,6 +244,11 @@ void GLUTWindow::display()
 	eyePosition = mainCamera.GetPosition();
 	glUniform3fv(eyePositionLocation, 1, &eyePosition.X);
 
+	texture1->Bind(GL_TEXTURE0);
+	glUniform1i(texture0Location, 0);
+	texture2->Bind(GL_TEXTURE1);
+	glUniform1i(texture1Location, 1);
+
 	//glDrawArrays(GL_POINTS, 0, teapot.NV());
 	glDrawElements(GL_TRIANGLES, teapot.NF() * 3, GL_UNSIGNED_INT, 0);
 
@@ -198,6 +259,7 @@ void GLUTWindow::closeOpenGL()
 {
 	glValidateProgram(shaderProgram);
 	glDisableVertexAttribArray(0);
+	delete texture1;
 }
 
 

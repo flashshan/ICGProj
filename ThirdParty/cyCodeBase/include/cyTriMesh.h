@@ -67,21 +67,7 @@ public:
 		~Str() { if ( data ) delete [] data; }				//!< Destructor
 		operator const char* () { return data; }			//!< Implicit conversion to const char
 		void operator = (const Str  &s) { *this = s.data; }	//!< Assignment operator
-		void operator = (const char *s) 
-		{ 
-			if (s)  { 
-				size_t n=strlen(s); 
-				if (data) delete [] data; 
-				data=new char[n+1]; 
-				strncpy_s(data, n, s, n);
-				data[n]='\0'; 
-			} 
-			else if (data) 
-			{ 
-				delete [] data; 
-				data=nullptr; 
-			} 
-		}	//!< Assignment operator
+		void operator = (const char *s) { if (s) { size_t n=strlen(s); if (data) delete [] data; data=new char[n+1]; strncpy(data,s,n); data[n]='\0'; } else if (data) { delete [] data; data=nullptr; } }	//!< Assignment operator
 	};
 
 	//! Material definition
@@ -276,8 +262,7 @@ inline void TriMesh::ComputeNormals(bool clockwise)
 
 inline bool TriMesh::LoadFromFileObj( const char *filename, bool loadMtl, std::ostream *outStream )
 {
-	FILE *fp;
-	fopen_s(&fp, filename, "r");
+	FILE *fp = fopen(filename,"r");
 	if ( !fp ) {
 		if ( outStream ) *outStream << "ERROR: Cannot open file " << filename << std::endl;
 		return false;
@@ -316,10 +301,10 @@ inline bool TriMesh::LoadFromFileObj( const char *filename, bool loadMtl, std::o
 			return i;
 		}
 		char& operator[](int i) { return data[i]; }
-		void ReadVertex( Point3f &v ) const { v.Zero(); sscanf_s( data+2, "%f %f %f", &v.x, &v.y, &v.z ); }
-		void ReadFloat3( float f[3] ) const { f[2]=f[1]=f[0]=0; int n = sscanf_s( data+2, "%f %f %f", &f[0], &f[1], &f[2] ); if ( n==1 ) f[2]=f[1]=f[0]; }
-		void ReadFloat( float *f ) const { sscanf_s( data+2, "%f", f ); }
-		void ReadInt( int *i, int start ) const { sscanf_s( data+start, "%d", i ); }
+		void ReadVertex( Point3f &v ) const { v.Zero(); sscanf( data+2, "%f %f %f", &v.x, &v.y, &v.z ); }
+		void ReadFloat3( float f[3] ) const { f[2]=f[1]=f[0]=0; int n = sscanf( data+2, "%f %f %f", &f[0], &f[1], &f[2] ); if ( n==1 ) f[2]=f[1]=f[0]; }
+		void ReadFloat( float *f ) const { sscanf( data+2, "%f", f ); }
+		void ReadInt( int *i, int start ) const { sscanf( data+start, "%d", i ); }
 		bool IsCommand( const char *cmd ) const {
 			int i=0;
 			while ( cmd[i]!='\0' ) {
@@ -519,13 +504,12 @@ inline bool TriMesh::LoadFromFileObj( const char *filename, bool loadMtl, std::o
 		if ( pathEnd ) {
 			int n = int(pathEnd-filename) + 1;
 			mtlPathName = new char[n+1];
-			strncpy_s(mtlPathName, n, filename,n);
+			strncpy(mtlPathName,filename,n);
 			mtlPathName[n] = '\0';
 		}
 		for ( unsigned int mi=0; mi<mtlFiles.size(); mi++ ) {
 			std::string mtlFilename = ( mtlPathName ) ? std::string(mtlPathName) + mtlFiles[mi].filename : mtlFiles[mi].filename;
-			FILE *fp;
-			fopen_s(&fp, mtlFilename.data(),"r");
+			FILE *fp = fopen(mtlFilename.data(),"r");
 			if ( !fp ) {
 				if ( outStream ) *outStream << "ERROR: Cannot open file " << mtlFilename << std::endl;
 				continue;
@@ -566,8 +550,7 @@ inline bool TriMesh::LoadFromFileObj( const char *filename, bool loadMtl, std::o
 
 inline bool TriMesh::SaveToFileObj( const char *filename, std::ostream *outStream )
 {
-	FILE *fp;
-	fopen_s(&fp, filename, "w");
+	FILE *fp = fopen(filename,"w");
 	if ( !fp ) {
 		if ( outStream ) *outStream << "ERROR: Cannot create file " << filename << std::endl;
 		return false;

@@ -1,6 +1,3 @@
-#include <Qt\qapplication.h>
-
-//#include "GUI/QTWindow.h"
 #include "GUI/GLUTWindow.h"
 
 #include <GL/freeglut.h>

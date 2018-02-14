@@ -2,9 +2,6 @@
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="GUI\QTWindow.cpp">
-      <Filter>GUI</Filter>
-    </ClCompile>
     <ClCompile Include="GUI\GLUTWindow.cpp">
       <Filter>GUI</Filter>
     </ClCompile>
@@ -31,6 +28,15 @@
     </ClCompile>
     <ClCompile Include="Core\Basic\LoadData.cpp">
       <Filter>Core\Basic</Filter>
+    </ClCompile>
+    <ClCompile Include="Graphics\ImageLoader\lodepng.cpp">
+      <Filter>Graphics\ImageLoader</Filter>
+    </ClCompile>
+    <ClCompile Include="Graphics\ImageLoader\lodepng_util.cpp">
+      <Filter>Graphics\ImageLoader</Filter>
+    </ClCompile>
+    <ClCompile Include="Graphics\Texture.cpp">
+      <Filter>Graphics</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -61,11 +67,11 @@
     <Filter Include="Core\Basic">
       <UniqueIdentifier>{b402f0e4-008d-4dac-bde2-3ffe979cd8b9}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Graphics\ImageLoader">
+      <UniqueIdentifier>{af9ed513-6f78-4d80-bca6-59af2b9e121c}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="GUI\QTWindow.h">
-      <Filter>GUI</Filter>
-    </ClInclude>
     <ClInclude Include="GUI\GLUTWindow.h">
       <Filter>GUI</Filter>
     </ClInclude>
@@ -125,6 +131,15 @@
     </ClInclude>
     <ClInclude Include="Core\Basic\Target.h">
       <Filter>Core\Basic</Filter>
+    </ClInclude>
+    <ClInclude Include="Graphics\ImageLoader\lodepng.h">
+      <Filter>Graphics\ImageLoader</Filter>
+    </ClInclude>
+    <ClInclude Include="Graphics\ImageLoader\lodepng_util.h">
+      <Filter>Graphics\ImageLoader</Filter>
+    </ClInclude>
+    <ClInclude Include="Graphics\Texture.h">
+      <Filter>Graphics</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
