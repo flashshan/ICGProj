@@ -25,25 +25,33 @@ int GLUTWindow::curFrame_ = 0;
 bool GLUTWindow::ctrlPressed_ = false;
 
 cy::TriMesh teapot;
-GLuint shaderProgram;
+GLuint firstProgram, secondProgram;
 
 //Camera mainCamera(cy::Point3f(0.0f, -5.0f, 0.0f), 90.0f, 1.0f, 0.1f, 10000.0f);
 Camera mainCamera(Vector3(0.0f, -3.0f, 0.0f), -180.0f, -90.0f, ProjectionParameters(90.0f, 1.7778f, 0.1f, 10000.0f));
 
-GLuint fullTransformMatrixLocation;
+GLuint fullTransformMatrixLocation1;
 GLuint lightDirectionLocation;
 GLuint eyePositionLocation;
 GLuint texture0Location;
 GLuint texture1Location;
+
+GLuint renderTextureLocation;
+GLuint fullTransformMatrixLocation2;
 
 Vector3 lightDirection;
 Vector3 eyePosition;
 
 float lightYaw = 0.0f, lightPitch = 0.0f;
 
+GLuint VAO, VAO2;
 GLuint VBO, VNO, VUVO, IBO;
+GLuint VBO2, VUVO2, IBO2;
 Texture *texture1 = nullptr;
 Texture *texture2 = nullptr;
+Texture *renderedTexture = nullptr;
+
+GLuint FramebufferName;
 
 std::string readShaderCode(const char* filePath)
 {
@@ -81,17 +89,17 @@ void LoadTexture(Texture *&io_texture, const char *i_filePath)
 	glTexParameterf(io_texture->GetTarget(), GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 }
 
-void CompileShader()
+void CompileShader(const char* vertShaderPath, const char* fragShaderPath, GLuint &io_program)
 {
-	shaderProgram = glCreateProgram();
+	io_program = glCreateProgram();
 	GLuint vertexShader = glCreateShader(GL_VERTEX_SHADER);
 	GLuint fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
 
 	std::string shaderTexts[2];
 	const GLchar *shaderTextChar[2];
 	GLint textLengths[2];
-	shaderTexts[0] = readShaderCode("Data/Shader/Vertex/meshVert.shader");
-	shaderTexts[1] = readShaderCode("Data/Shader/Fragment/meshFrag.shader");
+	shaderTexts[0] = readShaderCode(vertShaderPath);
+	shaderTexts[1] = readShaderCode(fragShaderPath);
 	shaderTextChar[0] = shaderTexts[0].c_str();
 	shaderTextChar[1] = shaderTexts[1].c_str();
 	textLengths[0] = static_cast<GLint>(strlen(shaderTextChar[0]));
@@ -119,21 +127,19 @@ void CompileShader()
 		assert(0);
 	}
 
-	glAttachShader(shaderProgram, vertexShader);
-	glAttachShader(shaderProgram, fragmentShader);
+	glAttachShader(io_program, vertexShader);
+	glAttachShader(io_program, fragmentShader);
 
-	glLinkProgram(shaderProgram);
+	glLinkProgram(io_program);
 
-	glGetProgramiv(shaderProgram, GL_LINK_STATUS, &success);
+	glGetProgramiv(io_program, GL_LINK_STATUS, &success);
 	if (!success)
 	{
 		GLchar InfoLog[1024];
-		glGetProgramInfoLog(shaderProgram, sizeof(InfoLog), NULL, InfoLog);
+		glGetProgramInfoLog(io_program, sizeof(InfoLog), NULL, InfoLog);
 		printf_s("Error linking shader program: '%s'\n", InfoLog);
 		assert(0);
 	}
-
-	glUseProgram(shaderProgram);
 }
 
 struct Vertex
@@ -175,6 +181,8 @@ void GLUTWindow::initOpenGL()
 	glCullFace(GL_BACK);
 	glEnable(GL_CULL_FACE);
 
+	glGenVertexArrays(1, &VAO);
+	glBindVertexArray(VAO);
 
 	// bind vertex data
 	glGenBuffers(1, &VBO);
@@ -200,25 +208,128 @@ void GLUTWindow::initOpenGL()
 	// bind index data
 	glGenBuffers(1, &IBO);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, IBO);
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, teapot.NF() * sizeof(float) * 3, &(teapot.F(0).v[0]), GL_STATIC_DRAW);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, teapot.NF() * sizeof(unsigned int) * 3, &(teapot.F(0).v[0]), GL_STATIC_DRAW);
 	
 	LoadTexture(texture1, teapot.M(0).map_Kd.data);
 	LoadTexture(texture2, teapot.M(0).map_Ks.data);
 
 
-	CompileShader();
+	glGenFramebuffers(1, &FramebufferName);
+	glBindFramebuffer(GL_FRAMEBUFFER, FramebufferName);
+
+	GLuint renderedTargetObj;
+	glGenTextures(1, &renderedTargetObj);
+	renderedTexture = new Texture(GL_TEXTURE_2D, renderedTargetObj);
+	glBindTexture(renderedTexture->GetTarget(), renderedTexture->GetObj());
+	glTexImage2D(renderedTexture->GetTarget(), 0, GL_RGBA, 1280, 720, 0, GL_RGBA, GL_UNSIGNED_BYTE, 0);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+
+	// Set "renderedTexture" as our colour attachement #0
+	glFramebufferTexture(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, renderedTexture->GetObj(), 0);
+
+	// Set the list of draw buffers.
+	GLenum DrawBuffers[1] = { GL_COLOR_ATTACHMENT0 };
+	glDrawBuffers(1, DrawBuffers); 
+	
+	// Always check that our framebuffer is ok
+	if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
+		return;
+
+	CompileShader("Data/Shader/Vertex/meshVert.shader", "Data/Shader/Fragment/meshFrag.shader", firstProgram);
 
 	// assert for test
-	fullTransformMatrixLocation = glGetUniformLocation(shaderProgram, "fullTransformMatrix");
+	fullTransformMatrixLocation1 = glGetUniformLocation(firstProgram, "fullTransformMatrix");
 	//assert(fullTransformMatrixLocation != 0xFFFFFFFF);
-	lightDirectionLocation = glGetUniformLocation(shaderProgram, "lightDirection");
+	lightDirectionLocation = glGetUniformLocation(firstProgram, "lightDirection");
 	//assert(lightDirectionLocation != 0xFFFFFFFF);
-	eyePositionLocation = glGetUniformLocation(shaderProgram, "eyePosition");
+	eyePositionLocation = glGetUniformLocation(firstProgram, "eyePosition");
 	//assert(eyePositionLocation != 0xFFFFFFFF);
-	texture0Location = glGetUniformLocation(shaderProgram, "texSampler0");
+	texture0Location = glGetUniformLocation(firstProgram, "texSampler0");
 	//assert(texture0Location != 0xFFFFFFFF);
-	texture1Location = glGetUniformLocation(shaderProgram, "texSampler1");
+	texture1Location = glGetUniformLocation(firstProgram, "texSampler1");
 	//assert(texture1Location != 0xFFFFFFFF);
+
+	//glUseProgram(firstProgram);
+	//Matrix result = mainCamera.getWorldToProjectionMatrix();
+	//glUniformMatrix4fv(fullTransformMatrixLocation1, 1, GL_TRUE, &result.M[0][0]);
+
+	//Quaternion lightQuat(Rotator(lightPitch, lightYaw, 0.0f));
+	//lightDirection = lightQuat.GetAxisX();
+	//glUniform3fv(lightDirectionLocation, 1, &lightDirection.X);
+
+	//eyePosition = mainCamera.GetPosition();
+	//glUniform3fv(eyePositionLocation, 1, &eyePosition.X);
+
+	//texture1->Bind(GL_TEXTURE0);
+	//glUniform1i(texture0Location, 0);
+	//texture2->Bind(GL_TEXTURE1);
+	//glUniform1i(texture1Location, 1);
+
+	//// Render to our framebuffer
+	//glBindFramebuffer(GL_FRAMEBUFFER, FramebufferName);
+	//glViewport(0, 0, 1280, 720); // Render on the whole framebuffer, complete from the lower left corner to the upper right
+
+	//							 // Always check that our framebuffer is ok
+	//if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
+	//	return;
+
+	//glDrawElements(GL_TRIANGLES, teapot.NF() * 3, GL_UNSIGNED_INT, 0);
+
+	
+
+	GLfloat quadVertexData[] = {
+		-3.0f, 0.0f, -3.0f, 
+		3.0f, 0.0f, -3.0f,
+		3.0f,  0.0f, 3.0f, 
+		-3.0f,  0.0f, 3.0f,
+	};
+
+	GLfloat quadUVData[] = {
+		0.0f, 0.0f, 0.0f,
+		1.0f, 0.0f, 0.0f,
+		1.0f, 1.0f, 0.0f,
+		0.0f, 1.0f, 0.0f,
+	};
+
+	GLuint quadIndex[] = {
+		0, 1, 2, 2, 3, 0
+	};
+
+	glGenVertexArrays(1, &VAO2);
+	glBindVertexArray(VAO2);
+
+	// bind vertex data
+	glGenBuffers(1, &VBO2);
+	glBindBuffer(GL_ARRAY_BUFFER, VBO2);
+	glBufferData(GL_ARRAY_BUFFER, 4 * sizeof(float) * 3, &quadVertexData[0], GL_STATIC_DRAW);
+	//glBufferData(GL_ARRAY_BUFFER, teapot.NV() * sizeof(float) * 3, &teapot.V(0), GL_STATIC_DRAW);
+	glEnableVertexAttribArray(0);
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, 0);
+	//glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, 0);
+
+
+	// bind uv data
+	glGenBuffers(1, &VUVO2);
+	glBindBuffer(GL_ARRAY_BUFFER, VUVO2);
+	glBufferData(GL_ARRAY_BUFFER, 4 * sizeof(float) * 3, &quadUVData[0], GL_STATIC_DRAW);
+	//glBufferData(GL_ARRAY_BUFFER, teapot.NVT() * sizeof(float) * 3, &teapot.VT(0), GL_STATIC_DRAW);
+	glEnableVertexAttribArray(2);
+	glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, 0, 0);
+
+	// bind index data
+	glGenBuffers(1, &IBO2);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, IBO2);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, 6 * sizeof(unsigned int), &quadIndex[0], GL_STATIC_DRAW);
+	//glBufferData(GL_ELEMENT_ARRAY_BUFFER, teapot.NF() * sizeof(unsigned int) * 3, &(teapot.F(0).v[0]), GL_STATIC_DRAW);
+
+	// Create and compile our GLSL program from the shaders
+	CompileShader("Data/Shader/Vertex/meshVertSimple.shader", "Data/Shader/Fragment/meshFragSimple.shader", secondProgram);
+
+	renderTextureLocation = glGetUniformLocation(secondProgram, "renderTexture");
+	assert(renderTextureLocation != 0xFFFFFFFF);
+	fullTransformMatrixLocation2 = glGetUniformLocation(secondProgram, "fullTransformMatrix");
+	assert(fullTransformMatrixLocation2 != 0xFFFFFFFF);
 }
 
 
@@ -228,14 +339,19 @@ void GLUTWindow::display()
 {
 	float alpha = (float)curFrame_ / (float)bgAnimationFrame_;
 
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
-
 	if (++curFrame_ > bgAnimationFrame_)
 		curFrame_ -= bgAnimationFrame_;
 
+
+	glUseProgram(firstProgram);
+	glBindVertexArray(VAO);
+
+	/*glBindBuffer(GL_ARRAY_BUFFER, VBO);
+	glBindBuffer(GL_ARRAY_BUFFER, VNO);
+	glBindBuffer(GL_ARRAY_BUFFER, VUVO);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, IBO);*/
 	Matrix result = mainCamera.getWorldToProjectionMatrix();
-	glUniformMatrix4fv(fullTransformMatrixLocation, 1, GL_TRUE, &result.M[0][0]);
+	glUniformMatrix4fv(fullTransformMatrixLocation1, 1, GL_TRUE, &result.M[0][0]);
 
 	Quaternion lightQuat(Rotator(lightPitch, lightYaw, 0.0f));
 	lightDirection = lightQuat.GetAxisX();
@@ -249,15 +365,44 @@ void GLUTWindow::display()
 	texture2->Bind(GL_TEXTURE1);
 	glUniform1i(texture1Location, 1);
 
+	// Render to our framebuffer
+	glViewport(0, 0, 1280, 720); // Render on the whole framebuffer, complete from the lower left corner to the upper right
+
+	//// Always check that our framebuffer is ok
+	if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
+		return;
+
 	//glDrawArrays(GL_POINTS, 0, teapot.NV());
+	
+	glBindFramebuffer(GL_FRAMEBUFFER, FramebufferName);	
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 	glDrawElements(GL_TRIANGLES, teapot.NF() * 3, GL_UNSIGNED_INT, 0);
+
+
+	glUseProgram(secondProgram);
+	glBindVertexArray(VAO2);
+
+	//Matrix result = mainCamera.getWorldToProjectionMatrix();
+	glUniformMatrix4fv(fullTransformMatrixLocation2, 1, GL_TRUE, &result.M[0][0]);
+	
+
+	renderedTexture->Bind(GL_TEXTURE0);
+	glUniform1i(renderTextureLocation, 0);
+
+	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+	glViewport(0, 0, 1280, 720); // Render on the whole framebuffer, complete from the lower left corner to the upper right
+	//glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+	glDrawElements(GL_TRIANGLES, /*teapot.NF() * */6, GL_UNSIGNED_INT, 0);
 
 	glutSwapBuffers();
 }
 
 void GLUTWindow::closeOpenGL()
 {
-	glValidateProgram(shaderProgram);
+	//glValidateProgram(shaderProgram);
 	glDisableVertexAttribArray(0);
 	delete texture1;
 }
@@ -289,7 +434,7 @@ void GLUTWindow::SpecialKeyPress(int key, int x, int y)
 	switch (key)
 	{
 	case GLUT_KEY_F6:
-		CompileShader();
+		//CompileShader();
 		mainCamera.Reset();
 	case GLUT_KEY_UP:
 		mainCamera.Move(0.02f);

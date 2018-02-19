@@ -149,5 +149,11 @@
     <None Include="Data\Shader\Vertex\meshVert.shader">
       <Filter>Data\Shader\Vertex</Filter>
     </None>
+    <None Include="Data\Shader\Fragment\meshFragSimple.shader">
+      <Filter>Data\Shader\Fragment</Filter>
+    </None>
+    <None Include="Data\Shader\Vertex\meshVertSimple.shader">
+      <Filter>Data\Shader\Vertex</Filter>
+    </None>
   </ItemGroup>
 </Project>

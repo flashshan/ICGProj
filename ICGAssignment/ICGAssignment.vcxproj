@@ -199,7 +199,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Data\Shader\Fragment\meshFrag.shader" />
+    <None Include="Data\Shader\Fragment\meshFragSimple.shader" />
     <None Include="Data\Shader\Vertex\meshVert.shader" />
+    <None Include="Data\Shader\Vertex\meshVertSimple.shader" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
