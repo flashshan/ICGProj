@@ -19,8 +19,6 @@ public:
 	static void PassiveMouseCB(int x, int y);
 	static void MouseButtonPress(int button, int state, int x, int y);
 private:
-	static int bgAnimationFrame_;
-	static int curFrame_;
 
 	static bool ctrlPressed_;
 };

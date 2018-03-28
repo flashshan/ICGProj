@@ -21,8 +21,6 @@
 #include <fstream>
 #include <string.h>
 
-int GLUTWindow::bgAnimationFrame_ = 120;
-int GLUTWindow::curFrame_ = 0;
 bool GLUTWindow::ctrlPressed_ = false;
 
 cy::TriMesh teapot;
@@ -148,15 +146,10 @@ void CompileShader(const char* vertShaderPath, const char* fragShaderPath, GLuin
 	}
 }
 
-struct Vertex
-{
-	cy::Point3f Position;
-	cy::Point3f Normal;
-};
 
 void GLUTWindow::initOpenGL()
 {
-	//glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+#pragma region Init glew
 	GLenum res = glewInit();
 	if (res != GLEW_OK)
 	{
@@ -172,15 +165,13 @@ void GLUTWindow::initOpenGL()
 		assert(0);
 	}
 
-	/*for (unsigned int i = 0; i < teapot.NV(); ++i)
-	{
-		teapot.V(i) *= 0.05f;
-	}*/
-
 	glFrontFace(GL_CW);
 	glCullFace(GL_BACK);
 	glEnable(GL_CULL_FACE);
 
+#pragma endregion
+
+#pragma region Gen Vertex Array 1
 	glGenVertexArrays(1, &VAO);
 	glBindVertexArray(VAO);
 
@@ -230,10 +221,11 @@ void GLUTWindow::initOpenGL()
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, IBO);
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, teapot.NF() * sizeof(unsigned int) * 3, &(teapot.F(0).v[0]), GL_STATIC_DRAW);*/
 	
+#pragma endregion
+
+#pragma region Compile shader and get location
 	LoadTexture(texture1, teapot.M(0).map_Kd.data);
 	LoadTexture(texture2, teapot.M(0).map_Ks.data);
-
-
 
 	CompileShader("Data/Shader/Vertex/meshVert.shader", "Data/Shader/Fragment/meshFrag.shader", firstProgram);
 
@@ -248,12 +240,9 @@ void GLUTWindow::initOpenGL()
 	//assert(texture0Location != 0xFFFFFFFF);
 	texture1Location = glGetUniformLocation(firstProgram, "texSampler1");
 	//assert(texture1Location != 0xFFFFFFFF);
+#pragma endregion
 
-	
-	/*renderedBuffer.Initialize(false, 32, 1280, 720);
-	renderedBuffer.SetTextureMaxAnisotropy();
-	renderedBuffer.BindTexture();*/
-
+#pragma region Render teapot into texture
 	GLuint renderedTargetObj;
 	glGenTextures(1, &renderedTargetObj);
 	renderedTexture = new Texture(GL_TEXTURE_2D, renderedTargetObj);
@@ -304,7 +293,11 @@ void GLUTWindow::initOpenGL()
 	glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 	//glDrawElements(GL_TRIANGLES, teapot.NF() * 3, GL_UNSIGNED_INT, 0);
 	glDrawArrays(GL_TRIANGLES, 0, vData.size());
+#pragma endregion
 
+#pragma region Gen Vertex Array 2
+	glGenVertexArrays(1, &VAO2);
+	glBindVertexArray(VAO2);
 
 	GLfloat quadVertexData[] = {
 		-20.0f, 0.0f, -20.0f, 
@@ -323,9 +316,6 @@ void GLUTWindow::initOpenGL()
 	GLuint quadIndex[] = {
 		0, 1, 2, 2, 3, 0
 	};
-
-	glGenVertexArrays(1, &VAO2);
-	glBindVertexArray(VAO2);
 
 	// bind vertex data
 	glGenBuffers(1, &VBO2);
@@ -350,7 +340,9 @@ void GLUTWindow::initOpenGL()
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, IBO2);
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, 6 * sizeof(unsigned int), &quadIndex[0], GL_STATIC_DRAW);
 	//glBufferData(GL_ELEMENT_ARRAY_BUFFER, teapot.NF() * sizeof(unsigned int) * 3, &(teapot.F(0).v[0]), GL_STATIC_DRAW);
+#pragma endregion
 
+#pragma region Compile another shader and get locations
 	// Create and compile our GLSL program from the shaders
 	CompileShader("Data/Shader/Vertex/meshVertSimple.shader", "Data/Shader/Fragment/meshFragSimple.shader", secondProgram);
 
@@ -360,17 +352,13 @@ void GLUTWindow::initOpenGL()
 	assert(renderTextureLocation != 0xFFFFFFFF);
 	fullTransformMatrixLocation2 = glGetUniformLocation(secondProgram, "fullTransformMatrix");
 	assert(fullTransformMatrixLocation2 != 0xFFFFFFFF);
+#pragma endregion
 }
-
 
 
 
 void GLUTWindow::display()
 {
-	float alpha = (float)curFrame_ / (float)bgAnimationFrame_;
-
-	if (++curFrame_ > bgAnimationFrame_)
-		curFrame_ -= bgAnimationFrame_;
 
 	Matrix result = mainCamera.getWorldToProjectionMatrix();
 
@@ -385,7 +373,7 @@ void GLUTWindow::display()
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
-	glViewport(0, 0, 1280, 720); // Render on the whole framebuffer, complete from the lower left corner to the upper right
+	glViewport(0, 0, 1280, 720); // Render on the whole frame buffer, complete from the lower left corner to the upper right
 	//glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 	glDrawElements(GL_TRIANGLES, /*teapot.NF() * */6, GL_UNSIGNED_INT, 0);
 
