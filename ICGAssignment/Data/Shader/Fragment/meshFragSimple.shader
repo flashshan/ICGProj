@@ -12,7 +12,10 @@ uniform sampler2D renderTexture;
 
 void main()
 {
+	
 	fragColor = texture2D(renderTexture, i_texCoord0.st) + vec4(0.2, 0.2, 0.2, 1.0);
+	//fragColor = vec4(i_texCoord0.s, i_texCoord0.t, 0.0, 1.0);
+
 	//vec4 _diffuseColor = texture2D(texSampler0, i_texCoord0.st);
 	//vec4 _specularColor = texture2D(texSampler1, i_texCoord0.st);
 

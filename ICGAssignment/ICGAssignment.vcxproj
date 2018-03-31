@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
@@ -168,7 +168,6 @@
     <ClCompile Include="Core\Math\Triangle.cpp" />
     <ClCompile Include="Graphics\ImageLoader\lodepng.cpp" />
     <ClCompile Include="Graphics\ImageLoader\lodepng_util.cpp" />
-    <ClCompile Include="Graphics\Texture.cpp" />
     <ClCompile Include="GUI\GLUTWindow.cpp" />
     <ClCompile Include="main.cpp" />
   </ItemGroup>
@@ -192,6 +191,7 @@
     <ClInclude Include="Core\Math\Vector3.h" />
     <ClInclude Include="Core\Math\Vector4.h" />
     <ClInclude Include="Core\Math\VectorSSE.h" />
+    <ClInclude Include="Graphics\Image.h" />
     <ClInclude Include="Graphics\ImageLoader\lodepng.h" />
     <ClInclude Include="Graphics\ImageLoader\lodepng_util.h" />
     <ClInclude Include="Graphics\Texture.h" />
@@ -199,9 +199,13 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Data\Shader\Fragment\meshFrag.shader" />
+    <None Include="Data\Shader\Fragment\meshFragReflection.shader" />
     <None Include="Data\Shader\Fragment\meshFragSimple.shader" />
+    <None Include="Data\Shader\Fragment\meshFragSkybox.shader" />
     <None Include="Data\Shader\Vertex\meshVert.shader" />
+    <None Include="Data\Shader\Vertex\meshVertReflection.shader" />
     <None Include="Data\Shader\Vertex\meshVertSimple.shader" />
+    <None Include="Data\Shader\Vertex\meshVertSkybox.shader" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

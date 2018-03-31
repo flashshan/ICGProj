@@ -35,9 +35,6 @@
     <ClCompile Include="Graphics\ImageLoader\lodepng_util.cpp">
       <Filter>Graphics\ImageLoader</Filter>
     </ClCompile>
-    <ClCompile Include="Graphics\Texture.cpp">
-      <Filter>Graphics</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="GUI">
@@ -48,12 +45,6 @@
     </Filter>
     <Filter Include="Data\Shader">
       <UniqueIdentifier>{a097c50e-6fa6-4c16-85b5-b34bec471b16}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Data\Shader\Vertex">
-      <UniqueIdentifier>{7e8cb89d-072e-4c37-b6a4-8a28b11ea390}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Data\Shader\Fragment">
-      <UniqueIdentifier>{cc186a30-7167-45d0-bd3e-dbcc13fe51aa}</UniqueIdentifier>
     </Filter>
     <Filter Include="Graphics">
       <UniqueIdentifier>{e6f72bc0-dd5c-4649-87b1-4161bd7c3e1f}</UniqueIdentifier>
@@ -69,6 +60,12 @@
     </Filter>
     <Filter Include="Graphics\ImageLoader">
       <UniqueIdentifier>{af9ed513-6f78-4d80-bca6-59af2b9e121c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Data\Shader\Fragment">
+      <UniqueIdentifier>{3d6259b6-f166-4f2d-b570-d5b74af8e1d8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Data\Shader\Vertex">
+      <UniqueIdentifier>{95dd1262-51cc-4e03-8cad-3f01b8d731e7}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -141,18 +138,33 @@
     <ClInclude Include="Graphics\Texture.h">
       <Filter>Graphics</Filter>
     </ClInclude>
+    <ClInclude Include="Graphics\Image.h">
+      <Filter>Graphics</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="Data\Shader\Fragment\meshFrag.shader">
       <Filter>Data\Shader\Fragment</Filter>
     </None>
-    <None Include="Data\Shader\Vertex\meshVert.shader">
-      <Filter>Data\Shader\Vertex</Filter>
-    </None>
     <None Include="Data\Shader\Fragment\meshFragSimple.shader">
       <Filter>Data\Shader\Fragment</Filter>
     </None>
+    <None Include="Data\Shader\Fragment\meshFragSkybox.shader">
+      <Filter>Data\Shader\Fragment</Filter>
+    </None>
+    <None Include="Data\Shader\Vertex\meshVert.shader">
+      <Filter>Data\Shader\Vertex</Filter>
+    </None>
     <None Include="Data\Shader\Vertex\meshVertSimple.shader">
+      <Filter>Data\Shader\Vertex</Filter>
+    </None>
+    <None Include="Data\Shader\Vertex\meshVertSkybox.shader">
+      <Filter>Data\Shader\Vertex</Filter>
+    </None>
+    <None Include="Data\Shader\Fragment\meshFragReflection.shader">
+      <Filter>Data\Shader\Fragment</Filter>
+    </None>
+    <None Include="Data\Shader\Vertex\meshVertReflection.shader">
       <Filter>Data\Shader\Vertex</Filter>
     </None>
   </ItemGroup>

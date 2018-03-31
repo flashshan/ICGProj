@@ -46,7 +46,8 @@ public:
 		perspectiveView_ = true;
 	}
 
-	Matrix getWorldToProjectionMatrix() const;
+	Matrix GetWorldToProjectionMatrix() const;
+	Matrix GetRefWorldToProjectionMatrix() const;
 
 	void Rotate(float yaw, float pitch);
 	void Move(float distance)
