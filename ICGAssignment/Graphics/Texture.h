@@ -53,7 +53,7 @@ private:
 
 class RenderedTexture2D {
 public:
-	static RenderedTexture2D* MakeRenderedTexture(int width, int height, int aniso)
+	static RenderedTexture2D* MakeRenderedTexture(int width, int height, float aniso)
 	{
 		GLuint renderedTargetObj;
 		glGenTextures(1, &renderedTargetObj);

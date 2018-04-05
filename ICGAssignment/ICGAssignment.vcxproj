@@ -166,9 +166,12 @@
     <ClCompile Include="Core\Math\Matrix.cpp" />
     <ClCompile Include="Core\Math\Quaternion.cpp" />
     <ClCompile Include="Core\Math\Triangle.cpp" />
+    <ClCompile Include="Graphics\GraphicsHelper.cpp" />
     <ClCompile Include="Graphics\ImageLoader\lodepng.cpp" />
     <ClCompile Include="Graphics\ImageLoader\lodepng_util.cpp" />
     <ClCompile Include="GUI\GLUTWindow.cpp" />
+    <ClCompile Include="Level\EnvironmentLevel.cpp" />
+    <ClCompile Include="Level\ShadowLevel.cpp" />
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -191,11 +194,16 @@
     <ClInclude Include="Core\Math\Vector3.h" />
     <ClInclude Include="Core\Math\Vector4.h" />
     <ClInclude Include="Core\Math\VectorSSE.h" />
+    <ClInclude Include="Graphics\FrameBuffer.h" />
+    <ClInclude Include="Graphics\GraphicsHelper.h" />
     <ClInclude Include="Graphics\Image.h" />
     <ClInclude Include="Graphics\ImageLoader\lodepng.h" />
     <ClInclude Include="Graphics\ImageLoader\lodepng_util.h" />
     <ClInclude Include="Graphics\Texture.h" />
     <ClInclude Include="GUI\GLUTWindow.h" />
+    <ClInclude Include="Level\EnvironmentLevel.h" />
+    <ClInclude Include="Level\ILevel.h" />
+    <ClInclude Include="Level\ShadowLevel.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Data\Shader\Fragment\meshFrag.shader" />

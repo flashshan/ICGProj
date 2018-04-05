@@ -1,25 +1,25 @@
 #pragma once
 
 #include "Core/Math/Matrix.h"
- 
-#include "Core/Basic/Assert.h"
+
 
 struct ProjectionParameters
 {
+public:
 	float HorizontalFOVDegree;
 	float AspectRatio;
 	float NearPlane;
 	float FarPlane;
 
-	ProjectionParameters(float horizontalFOVDegree, float aspectRatio, float nearPlane, float farPlane) 
+	ProjectionParameters(float horizontalFOVDegree, float aspectRatio, float nearPlane, float farPlane)
 		: HorizontalFOVDegree(horizontalFOVDegree), AspectRatio(aspectRatio), NearPlane(nearPlane), FarPlane(farPlane) {}
 };
 
 class Camera
 {
 public:
-	Camera(Vector3 pos, float yaw, float pitch, ProjectionParameters projectionParameters) :
-		originPosition_(pos), position_(pos), upDir_(0.0f, 0.0f, 1.0f), originYaw_(yaw), yaw_(yaw), originPitch_(pitch), pitch_(pitch)
+	Camera(Vector3 pos, float yaw, float pitch, ProjectionParameters projectionParameters) 
+		: originPosition_(pos), position_(pos), upDir_(0.0f, 0.0f, 1.0f), originYaw_(yaw), yaw_(yaw), originPitch_(pitch), pitch_(pitch)
 	{
 		const float xScale = 1.0f / Math::Tan(Math::DegreesToRadians(projectionParameters.HorizontalFOVDegree) / 2);
 		const float yScale = xScale / projectionParameters.AspectRatio;
@@ -49,7 +49,12 @@ public:
 	Matrix GetWorldToProjectionMatrix() const;
 	Matrix GetRefWorldToProjectionMatrix() const;
 
-	void Rotate(float yaw, float pitch);
+	void Rotate(float yaw, float pitch)
+	{
+		yaw_ += yaw;
+		pitch_ += pitch;
+	}
+
 	void Move(float distance)
 	{
 		distance_ += distance;

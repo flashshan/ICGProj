@@ -7,25 +7,9 @@
 #include <string.h>
 #include <assert.h>
 
-//void GLUTWindow::keyPressEvent(QKeyEvent* e)
-//{
-//	switch (e->key())
-//	{
-//	case Qt::Key::Key_Escape:
-//		exit(0);
-//		break;
-//	}
-//	repaint();
-//}
-
 
 int main(int argc, char* argv[])
 {
-	//QApplication app(argc, argv);
-	//
-	//GLWindow glWindow;
-	//glWindow.show();
-	//return app.exec();
 
 	glutInit(&argc, argv);
 	glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGBA | GLUT_DEPTH);
@@ -34,22 +18,20 @@ int main(int argc, char* argv[])
 	glutInitWindowPosition(100, 100);
 	glutCreateWindow("ICG Practice");
 
-	GLUTWindow::initOpenGL();
-
+	GLUTWindow::InitOpenGL();
 
 	glutKeyboardFunc(GLUTWindow::NormalKeyPress);
 	glutSpecialFunc(GLUTWindow::SpecialKeyPress);
 	glutSpecialUpFunc(GLUTWindow::SpecialKeyRelease);
-	//glutMouseFunc(GLUTWindow::MouseButtonPress);
 	glutPassiveMotionFunc(GLUTWindow::PassiveMouseCB);
 
 
-	glutDisplayFunc(GLUTWindow::display);
-	glutIdleFunc(GLUTWindow::display);
-	glutReshapeFunc(GLUTWindow::reshape);
+	glutDisplayFunc(GLUTWindow::Display);
+	glutIdleFunc(GLUTWindow::Display);
+	glutReshapeFunc(GLUTWindow::Reshape);
 
 	glutMainLoop();
 
-	GLUTWindow::closeOpenGL();
+	GLUTWindow::CloseOpenGL();
 	return 0;
 }

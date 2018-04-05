@@ -35,6 +35,15 @@
     <ClCompile Include="Graphics\ImageLoader\lodepng_util.cpp">
       <Filter>Graphics\ImageLoader</Filter>
     </ClCompile>
+    <ClCompile Include="Level\EnvironmentLevel.cpp">
+      <Filter>Level</Filter>
+    </ClCompile>
+    <ClCompile Include="Level\ShadowLevel.cpp">
+      <Filter>Level</Filter>
+    </ClCompile>
+    <ClCompile Include="Graphics\GraphicsHelper.cpp">
+      <Filter>Graphics</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="GUI">
@@ -66,6 +75,9 @@
     </Filter>
     <Filter Include="Data\Shader\Vertex">
       <UniqueIdentifier>{95dd1262-51cc-4e03-8cad-3f01b8d731e7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Level">
+      <UniqueIdentifier>{5d99b141-131a-4792-bb8f-00790cdd258d}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -139,6 +151,21 @@
       <Filter>Graphics</Filter>
     </ClInclude>
     <ClInclude Include="Graphics\Image.h">
+      <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="Graphics\FrameBuffer.h">
+      <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="Level\EnvironmentLevel.h">
+      <Filter>Level</Filter>
+    </ClInclude>
+    <ClInclude Include="Level\ILevel.h">
+      <Filter>Level</Filter>
+    </ClInclude>
+    <ClInclude Include="Level\ShadowLevel.h">
+      <Filter>Level</Filter>
+    </ClInclude>
+    <ClInclude Include="Graphics\GraphicsHelper.h">
       <Filter>Graphics</Filter>
     </ClInclude>
   </ItemGroup>

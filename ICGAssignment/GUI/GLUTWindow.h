@@ -1,26 +1,20 @@
 #pragma once
 
 
-// a static class
 
-class GLUTWindow
+namespace GLUTWindow
 {
-public:
-	static void initOpenGL();
-	static void display();
-	static void closeOpenGL();
+	void InitOpenGL();
+	void Display();
+	void CloseOpenGL();
 
-	static void reshape(int w, int h);
-	
-	static void NormalKeyPress(unsigned char key, int x, int y);
-	static void SpecialKeyPress(int key, int x, int y);
-	static void SpecialKeyRelease(int key, int x, int y);
+	void Reshape(int w, int h);
 
-	static void PassiveMouseCB(int x, int y);
-	static void MouseButtonPress(int button, int state, int x, int y);
-private:
+	void NormalKeyPress(unsigned char key, int x, int y);
+	void SpecialKeyPress(int key, int x, int y);
+	void SpecialKeyRelease(int key, int x, int y);
 
-	static bool ctrlPressed_;
-
+	void PassiveMouseCB(int x, int y);
+	void MouseButtonPress(int button, int state, int x, int y);
 };
 

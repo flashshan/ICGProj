@@ -30,8 +30,3 @@ Matrix Camera::GetRefWorldToProjectionMatrix() const
 	return viewToProjection_ * Matrix(refRotator).GetTranspose() * Matrix::CreateTranslate(-refPosition).GetTranspose();
 }
 
-void Camera::Rotate(float yaw, float pitch)
-{
-	yaw_ += yaw;
-	pitch_ += pitch;
-}
