@@ -12,13 +12,35 @@
 
 #include "Core/Math/Matrix.h"
 #include "Core/Math/Quaternion.h"
-#include "Level/EnvironmentLevel.h"
 
+#include "Level/RenderTextureLevel.h"
+#include "Level/EnvironmentLevel.h"
+#include "Level/ShadowLevel.h"
+#include "Level/ShadowLevelTest.h"
+#include "Level/TerrainLevel.h"
 
 bool ctrlPressed = false;
 
-Camera mainCamera(Vector3(0.0f, 30.0f, 50.0f), -180.0f, 150.0f, ProjectionParameters(90.0f, 1.0f, 0.1f, 10000.0f));
+//Camera mainCamera(Vector3(0.0f, 30.0f, 50.0f), -180.0f, 150.0f, ProjectionParameters(90.0f, 1.0f, 0.1f, 10000.0f));
+Camera mainCamera(Vector3(0.0f, 70.0f, 50.0f), -180.0f, 150.0f, ProjectionParameters(90.0f, 1.0f, 0.1f, 100.0f));
+
 std::vector<ILevel *> levels;
+
+// temporary method
+void switchToLevel(ILevel *i_level)
+{
+	for (unsigned int i = 0; i < levels.size(); ++i)
+	{
+		levels[i]->CloseLevel();
+		delete levels[i];
+	}
+	levels.clear();
+
+	levels.push_back(i_level);
+	for (unsigned int i = 0; i < levels.size(); ++i)
+		levels[i]->InitLevel();
+}
+
 
 void GLUTWindow::InitOpenGL()
 {
@@ -33,12 +55,17 @@ void GLUTWindow::InitOpenGL()
 	glFrontFace(GL_CW);
 	glCullFace(GL_BACK);
 	glEnable(GL_CULL_FACE);
+	glEnable(GL_DEPTH_TEST);
 #pragma endregion
 
-	levels.push_back(new EnvironmentLevel(&mainCamera));
+	//levels.push_back(new EnvironmentLevel(&mainCamera));
+	//levels.push_back(new RenderTextureLevel(&mainCamera));
 
-	for(unsigned int i = 0; i < levels.size(); ++i)
-		levels[i]->InitLevel();
+	//levels.push_back(new ShadowLevel(&mainCamera));
+	//levels.push_back(new ShadowLevelTest(&mainCamera));
+	
+	switchToLevel(new ShadowLevelTest(&mainCamera));
+	//switchToLevel(new TerrainLevel(&mainCamera));
 }
 
 
@@ -62,7 +89,6 @@ void GLUTWindow::CloseOpenGL()
 
 	for (unsigned int i = 0; i < levels.size(); ++i)
 		levels[i]->CloseLevel();
-	
 }
 
 
@@ -78,9 +104,35 @@ void GLUTWindow::NormalKeyPress(unsigned char key, int x, int y)
 	case 27: // Escape key
 		exit(0);
 		break;
-	case 112: // key p
-	case 80:  // key P
+	case 'P': 
+	case 'p': 
 		mainCamera.SwitchView();
+		break;
+	case 'A':  // key A
+	case 'a':  // key a
+	case 'D':  // key D
+	case 'd': // key d
+	case 'W':  // key D
+	case 'w': // key d
+	case 'S':  // key D
+	case 's': // key d
+		for (unsigned int i = 0; i < levels.size(); ++i)
+			levels[i]->HandleNormalKey(key);
+		break;
+	case '1':
+		switchToLevel(new RenderTextureLevel(&mainCamera));
+		break;
+	case '2':
+		switchToLevel(new EnvironmentLevel(&mainCamera));
+		break;
+	case '3':
+		switchToLevel(new ShadowLevel(&mainCamera));
+		break;
+	case '4':
+		switchToLevel(new TerrainLevel(&mainCamera));
+		break;
+		
+	default:
 		break;
 	}
 	glutPostRedisplay();

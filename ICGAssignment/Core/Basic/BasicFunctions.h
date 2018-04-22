@@ -63,7 +63,7 @@ namespace Math {
 	FORCEINLINE int Abs(int i_value);
 	FORCEINLINE float AbsF(float i_float);
 
-	FORCEINLINE void RandInit(int32 i_seed) { srand(i_seed); }
+	FORCEINLINE void RandInit(uint32 i_seed) { srand(i_seed); }
 
 	FORCEINLINE int32 Rand() { return rand(); }	
 	FORCEINLINE int32 RandInt(int32 i_bound);

@@ -56,6 +56,12 @@ public:
 	struct TriFace
 	{
 		unsigned int v[3];	//!< vertex indices
+		
+		TriFace() {}
+
+		TriFace(unsigned int i1, unsigned int i2, unsigned int i3)
+			: v{i1, i2, i3}
+		{}
 	};
 
 	//! Simple character string

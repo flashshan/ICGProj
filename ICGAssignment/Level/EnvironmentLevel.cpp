@@ -16,7 +16,7 @@ void EnvironmentLevel::InitLevel()
 	glBindVertexArray(VAOCube_);
 
 	{
-		const char* cubeFilePath = "cube.obj";
+		const char* cubeFilePath = "Data/Mesh/Environment/cube.obj";
 		if (!cube_.LoadFromFileObj(cubeFilePath))
 		{
 			printf_s("Load File: %s failed!\n", cubeFilePath);
@@ -58,7 +58,7 @@ void EnvironmentLevel::InitLevel()
 	glBindVertexArray(VAOSphere_);
 
 	{
-		const char* sphereFilePath = "sphere.obj";
+		const char* sphereFilePath = "Data/Mesh/Environment/sphere.obj";
 		if (!sphere_.LoadFromFileObj(sphereFilePath))
 		{
 			printf_s("Load File: %s failed!\n", sphereFilePath);
@@ -92,7 +92,7 @@ void EnvironmentLevel::InitLevel()
 	glBindVertexArray(VAOTeapot_);
 
 	{
-		const char* dataFilePath = "teapot.obj";
+		const char* dataFilePath = "Data/Mesh/Environment/teapot.obj";
 		if (!teapot_.LoadFromFileObj(dataFilePath))
 		{
 			printf_s("Load File: %s failed!\n", dataFilePath);
@@ -207,7 +207,6 @@ void EnvironmentLevel::InitLevel()
 }
 
 
-
 void EnvironmentLevel::DisplayLevel()
 {
 	Matrix fullTransformMatrix = mainCamera_->GetWorldToProjectionMatrix();
@@ -215,13 +214,12 @@ void EnvironmentLevel::DisplayLevel()
 	Matrix fullTransformMatrix2 = mainCamera_->GetRefWorldToProjectionMatrix();
 	Vector3 eyePosition2(eyePosition.X, -eyePosition.Y, eyePosition.Z);
 
-	Quaternion lightQuat(Rotator(lightPitch_, lightYaw_, 0.0f));
-	Vector3 lightDirection = lightQuat.GetAxisX();
+	Vector3 lightDirection = mainLight_.GetDirection();
 
 	if (!frameBuffer_->CheckStatus())
 		return;
 
-	frameBuffer_->BindBufferTexture(renderedTexture_->GetObj());
+	frameBuffer_->BindBufferTexture(renderedTexture_);
 
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
@@ -319,7 +317,10 @@ void EnvironmentLevel::DisplayLevel()
 
 void EnvironmentLevel::CloseLevel()
 {
-	glDisableVertexAttribArray(0);
+	glDisableVertexAttribArray(VAOCube_);
+	glDisableVertexAttribArray(VAOSphere_);
+	glDisableVertexAttribArray(VAOTeapot_);
+	glDisableVertexAttribArray(VAOPlane_);
 
 	if (renderedTexture_)
 		delete renderedTexture_;

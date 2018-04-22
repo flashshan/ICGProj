@@ -3,7 +3,7 @@
 #include <GL/glew.h>
 #include "GL/freeglut.h"
 
-#include "Image.h"
+#include "Object/Image.h"
 
 class Texture2D {
 public:
@@ -63,7 +63,7 @@ public:
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 
-		RenderedTexture2D *res = new RenderedTexture2D(renderedTargetObj);
+		RenderedTexture2D *res = new RenderedTexture2D(renderedTargetObj, width, height);
 
 		//glGetFloatv(GL_MAX_TEXTURE_MAX_ANISOTROPY_EXT, &maxAniso);
 		glSamplerParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAX_ANISOTROPY_EXT, aniso);
@@ -78,21 +78,69 @@ public:
 
 	void Bind(GLenum textureUnit)
 	{
-		//glActiveTexture(textureUnit);
+		glActiveTexture(textureUnit);
 		glBindTexture(GL_TEXTURE_2D, textureObj_);
 	}
 
-	GLuint GetObj() { return textureObj_; }
+	GLuint GetObj() const { return textureObj_; }
+	int GetWidth() const { return width_; }
+	int GetHeight() const { return height_; }
 
-	RenderedTexture2D(GLuint i_obj)
-		: textureObj_(i_obj)
+	RenderedTexture2D(GLuint i_obj, int i_width, int i_height)
+		: textureObj_(i_obj), width_(i_width), height_(i_height)
 	{
 	}
 
 private:
 	GLuint textureObj_;
+	int width_, height_;
 };
 
+
+class DepthTexture2D
+{
+public:
+	static DepthTexture2D* MakeRenderedTexture(int width, int height)
+	{
+		GLuint depthTargetObj;
+		glGenTextures(1, &depthTargetObj);
+
+		glBindTexture(GL_TEXTURE_2D, depthTargetObj);
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT, width, height, 0, GL_DEPTH_COMPONENT, GL_FLOAT, NULL);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE /*GL_REPEAT*/);
+
+		DepthTexture2D *res = new DepthTexture2D(depthTargetObj, width, height);
+
+		return res;
+	}
+
+	~DepthTexture2D()
+	{
+		glDeleteTextures(1, &textureObj_);
+	}
+
+	void Bind(GLenum textureUnit)
+	{
+		glActiveTexture(textureUnit);
+		glBindTexture(GL_TEXTURE_2D, textureObj_);
+	}
+
+	GLuint GetObj() const { return textureObj_; }
+	int GetWidth() const { return width_; }
+	int GetHeight() const { return height_; }
+
+	DepthTexture2D(GLuint i_obj, int i_width, int i_height)
+		: textureObj_(i_obj), width_(i_width), height_(i_height)
+	{
+	}
+
+private:
+	GLuint textureObj_;
+	int width_, height_;
+};
 
 class CubeMapTexture {
 public:

@@ -1,7 +1,6 @@
 #pragma once
 
 
-
 namespace GLUTWindow
 {
 	void InitOpenGL();
@@ -16,5 +15,6 @@ namespace GLUTWindow
 
 	void PassiveMouseCB(int x, int y);
 	void MouseButtonPress(int button, int state, int x, int y);
+
 };
 

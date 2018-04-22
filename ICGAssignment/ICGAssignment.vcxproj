@@ -162,8 +162,8 @@
     <ClCompile Include="Core\Basic\BasicFunctions.cpp" />
     <ClCompile Include="Core\Basic\ErrorMessage.cpp" />
     <ClCompile Include="Core\Basic\LoadData.cpp" />
-    <ClCompile Include="Core\Camera.cpp" />
     <ClCompile Include="Core\Math\Matrix.cpp" />
+    <ClCompile Include="Core\Math\PerlinNoise.cpp" />
     <ClCompile Include="Core\Math\Quaternion.cpp" />
     <ClCompile Include="Core\Math\Triangle.cpp" />
     <ClCompile Include="Graphics\GraphicsHelper.cpp" />
@@ -171,8 +171,14 @@
     <ClCompile Include="Graphics\ImageLoader\lodepng_util.cpp" />
     <ClCompile Include="GUI\GLUTWindow.cpp" />
     <ClCompile Include="Level\EnvironmentLevel.cpp" />
+    <ClCompile Include="Level\RenderTextureLevel.cpp" />
     <ClCompile Include="Level\ShadowLevel.cpp" />
+    <ClCompile Include="Level\ShadowLevelTest.cpp" />
+    <ClCompile Include="Level\TerrainLevel.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="Object\Camera.cpp" />
+    <ClCompile Include="Object\Light.cpp" />
+    <ClCompile Include="Object\Terrain.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Core\Basic\Assert.h" />
@@ -182,11 +188,11 @@
     <ClInclude Include="Core\Basic\FileIO.h" />
     <ClInclude Include="Core\Basic\LuaData.h" />
     <ClInclude Include="Core\Basic\Target.h" />
-    <ClInclude Include="Core\Camera.h" />
     <ClInclude Include="Core\Math\Axis.h" />
     <ClInclude Include="Core\Math\Box2D.h" />
     <ClInclude Include="Core\Math\Color.h" />
     <ClInclude Include="Core\Math\Matrix.h" />
+    <ClInclude Include="Core\Math\PerlinNoise.h" />
     <ClInclude Include="Core\Math\Quaternion.h" />
     <ClInclude Include="Core\Math\Rotator.h" />
     <ClInclude Include="Core\Math\Triangle.h" />
@@ -196,22 +202,36 @@
     <ClInclude Include="Core\Math\VectorSSE.h" />
     <ClInclude Include="Graphics\FrameBuffer.h" />
     <ClInclude Include="Graphics\GraphicsHelper.h" />
-    <ClInclude Include="Graphics\Image.h" />
     <ClInclude Include="Graphics\ImageLoader\lodepng.h" />
     <ClInclude Include="Graphics\ImageLoader\lodepng_util.h" />
     <ClInclude Include="Graphics\Texture.h" />
     <ClInclude Include="GUI\GLUTWindow.h" />
     <ClInclude Include="Level\EnvironmentLevel.h" />
     <ClInclude Include="Level\ILevel.h" />
+    <ClInclude Include="Level\RenderTextureLevel.h" />
     <ClInclude Include="Level\ShadowLevel.h" />
+    <ClInclude Include="Level\ShadowLevelTest.h" />
+    <ClInclude Include="Level\TerrainLevel.h" />
+    <ClInclude Include="Object\Camera.h" />
+    <ClInclude Include="Object\Image.h" />
+    <ClInclude Include="Object\Light.h" />
+    <ClInclude Include="Object\Terrain.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Data\Shader\Fragment\meshFrag.shader" />
+    <None Include="Data\Shader\Fragment\meshFragDepthBuffer.shader" />
+    <None Include="Data\Shader\Fragment\meshFragDiffuse.shader" />
+    <None Include="Data\Shader\Fragment\meshFragLight.shader" />
     <None Include="Data\Shader\Fragment\meshFragReflection.shader" />
+    <None Include="Data\Shader\Fragment\meshFragShadow.shader" />
     <None Include="Data\Shader\Fragment\meshFragSimple.shader" />
     <None Include="Data\Shader\Fragment\meshFragSkybox.shader" />
     <None Include="Data\Shader\Vertex\meshVert.shader" />
+    <None Include="Data\Shader\Vertex\meshVertDiffuse.shader" />
+    <None Include="Data\Shader\Vertex\meshVertLight.shader" />
     <None Include="Data\Shader\Vertex\meshVertReflection.shader" />
+    <None Include="Data\Shader\Vertex\meshVertDepthBuffer.shader" />
+    <None Include="Data\Shader\Vertex\meshVertShadow.shader" />
     <None Include="Data\Shader\Vertex\meshVertSimple.shader" />
     <None Include="Data\Shader\Vertex\meshVertSkybox.shader" />
   </ItemGroup>

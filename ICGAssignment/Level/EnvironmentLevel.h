@@ -2,7 +2,8 @@
 
 #include "ILevel.h"
 
-#include "Core/Camera.h"
+#include "Object/Camera.h"
+#include "Object/Light.h"
 #include "Graphics/Texture.h"
 #include "Graphics/FrameBuffer.h"
 #include "Graphics/GraphicsHelper.h"
@@ -17,23 +18,28 @@ class EnvironmentLevel : public ILevel
 {
 public:
 	explicit EnvironmentLevel(Camera *i_camera)
-		: mainCamera_(i_camera) {}
+		: mainCamera_(i_camera), mainLight_(0.0f, 0.0f)
+	{
+	}
 
 	virtual void InitLevel() override;
 	virtual void DisplayLevel() override;
 	virtual void CloseLevel() override;
 
-	void UpdateMainLight(float i_pitch, float i_yaw)
+	virtual void UpdateMainLight(float i_pitch, float i_yaw) override
 	{
-		lightPitch_ += i_pitch;
-		lightYaw_ += i_yaw;
+		mainLight_.AddPitchYaw(i_pitch, i_yaw);
 	}
-	
+
+	virtual void HandleNormalKey(char i_char) override
+	{
+	}
+
 private:
 	Camera* mainCamera_;
-
+	DirectionalLight mainLight_;
+	
 	cy::TriMesh teapot_, cube_, sphere_;
-	float lightYaw_ = 0.0f, lightPitch_ = 0.0f;
 	GLuint skyBoxProgram_, reflectionPrgram_, teapotProgram_, planeProgram_;
 
 	// skyBox shader locations

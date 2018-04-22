@@ -5,9 +5,6 @@
     <ClCompile Include="GUI\GLUTWindow.cpp">
       <Filter>GUI</Filter>
     </ClCompile>
-    <ClCompile Include="Core\Camera.cpp">
-      <Filter>Core</Filter>
-    </ClCompile>
     <ClCompile Include="Core\Math\Matrix.cpp">
       <Filter>Core\Math</Filter>
     </ClCompile>
@@ -38,11 +35,32 @@
     <ClCompile Include="Level\EnvironmentLevel.cpp">
       <Filter>Level</Filter>
     </ClCompile>
+    <ClCompile Include="Graphics\GraphicsHelper.cpp">
+      <Filter>Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="Level\RenderTextureLevel.cpp">
+      <Filter>Level</Filter>
+    </ClCompile>
     <ClCompile Include="Level\ShadowLevel.cpp">
       <Filter>Level</Filter>
     </ClCompile>
-    <ClCompile Include="Graphics\GraphicsHelper.cpp">
-      <Filter>Graphics</Filter>
+    <ClCompile Include="Level\ShadowLevelTest.cpp">
+      <Filter>Level</Filter>
+    </ClCompile>
+    <ClCompile Include="Object\Light.cpp">
+      <Filter>Object</Filter>
+    </ClCompile>
+    <ClCompile Include="Object\Camera.cpp">
+      <Filter>Object</Filter>
+    </ClCompile>
+    <ClCompile Include="Object\Terrain.cpp">
+      <Filter>Object</Filter>
+    </ClCompile>
+    <ClCompile Include="Level\TerrainLevel.cpp">
+      <Filter>Level</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\Math\PerlinNoise.cpp">
+      <Filter>Core\Math</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -79,13 +97,13 @@
     <Filter Include="Level">
       <UniqueIdentifier>{5d99b141-131a-4792-bb8f-00790cdd258d}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Object">
+      <UniqueIdentifier>{d5e82abd-ebcb-499d-b202-95d7a5c811bc}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GUI\GLUTWindow.h">
       <Filter>GUI</Filter>
-    </ClInclude>
-    <ClInclude Include="Core\Camera.h">
-      <Filter>Core</Filter>
     </ClInclude>
     <ClInclude Include="Core\Math\Axis.h">
       <Filter>Core\Math</Filter>
@@ -150,9 +168,6 @@
     <ClInclude Include="Graphics\Texture.h">
       <Filter>Graphics</Filter>
     </ClInclude>
-    <ClInclude Include="Graphics\Image.h">
-      <Filter>Graphics</Filter>
-    </ClInclude>
     <ClInclude Include="Graphics\FrameBuffer.h">
       <Filter>Graphics</Filter>
     </ClInclude>
@@ -162,11 +177,35 @@
     <ClInclude Include="Level\ILevel.h">
       <Filter>Level</Filter>
     </ClInclude>
+    <ClInclude Include="Graphics\GraphicsHelper.h">
+      <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="Level\RenderTextureLevel.h">
+      <Filter>Level</Filter>
+    </ClInclude>
     <ClInclude Include="Level\ShadowLevel.h">
       <Filter>Level</Filter>
     </ClInclude>
-    <ClInclude Include="Graphics\GraphicsHelper.h">
-      <Filter>Graphics</Filter>
+    <ClInclude Include="Level\ShadowLevelTest.h">
+      <Filter>Level</Filter>
+    </ClInclude>
+    <ClInclude Include="Object\Light.h">
+      <Filter>Object</Filter>
+    </ClInclude>
+    <ClInclude Include="Object\Camera.h">
+      <Filter>Object</Filter>
+    </ClInclude>
+    <ClInclude Include="Object\Terrain.h">
+      <Filter>Object</Filter>
+    </ClInclude>
+    <ClInclude Include="Level\TerrainLevel.h">
+      <Filter>Level</Filter>
+    </ClInclude>
+    <ClInclude Include="Object\Image.h">
+      <Filter>Object</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\Math\PerlinNoise.h">
+      <Filter>Core\Math</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -193,6 +232,30 @@
     </None>
     <None Include="Data\Shader\Vertex\meshVertReflection.shader">
       <Filter>Data\Shader\Vertex</Filter>
+    </None>
+    <None Include="Data\Shader\Fragment\meshFragShadow.shader">
+      <Filter>Data\Shader\Fragment</Filter>
+    </None>
+    <None Include="Data\Shader\Fragment\meshFragLight.shader">
+      <Filter>Data\Shader\Fragment</Filter>
+    </None>
+    <None Include="Data\Shader\Vertex\meshVertLight.shader">
+      <Filter>Data\Shader\Vertex</Filter>
+    </None>
+    <None Include="Data\Shader\Fragment\meshFragDepthBuffer.shader">
+      <Filter>Data\Shader\Fragment</Filter>
+    </None>
+    <None Include="Data\Shader\Vertex\meshVertDepthBuffer.shader">
+      <Filter>Data\Shader\Vertex</Filter>
+    </None>
+    <None Include="Data\Shader\Vertex\meshVertShadow.shader">
+      <Filter>Data\Shader\Vertex</Filter>
+    </None>
+    <None Include="Data\Shader\Vertex\meshVertDiffuse.shader">
+      <Filter>Data\Shader\Vertex</Filter>
+    </None>
+    <None Include="Data\Shader\Fragment\meshFragDiffuse.shader">
+      <Filter>Data\Shader\Fragment</Filter>
     </None>
   </ItemGroup>
 </Project>

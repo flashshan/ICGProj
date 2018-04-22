@@ -15,7 +15,7 @@ int main(int argc, char* argv[])
 	glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGBA | GLUT_DEPTH);
 	
 	glutInitWindowSize(1000, 1000);
-	glutInitWindowPosition(100, 100);
+	glutInitWindowPosition(100, 0);
 	glutCreateWindow("ICG Practice");
 
 	GLUTWindow::InitOpenGL();

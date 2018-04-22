@@ -14,13 +14,13 @@ out vec4 fragColor;
 uniform vec3 eyePosition;
 uniform vec3 lightDirection;
 
-uniform sampler2D texSampler0;
-uniform sampler2D texSampler1;
+uniform sampler2D diffuseTexture;
+uniform sampler2D specularTexture;
 
 void main()
 {
-	vec4 _diffuseColor = texture2D(texSampler0, i_texCoord0.st);
-	vec4 _specularColor = texture2D(texSampler1, i_texCoord0.st);
+	vec4 _diffuseColor = texture2D(diffuseTexture, i_texCoord0.st);
+	vec4 _specularColor = texture2D(specularTexture, i_texCoord0.st);
 
 	vec3 _ambientColor = vec3(0.1, 0.1, 0.1);
 
